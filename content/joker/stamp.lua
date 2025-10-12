@@ -4,7 +4,8 @@ SMODS.Joker {
     extra = {
       chips = 0,
       chip_mod = 25,
-      odds = 2
+      numerator = 2,
+      denominator = 5,
     }
   },
   rarity = 3,
@@ -18,8 +19,18 @@ SMODS.Joker {
   perishable_compat = false,
   pixel_size = { w = 35, h = 45 },
 
+  in_pool = function(self, args)
+    if G.playing_cards then
+      for _, card in ipairs(G.playing_cards) do
+        if card.seal then
+          return true
+        end
+      end
+    end
+  end,
+
   loc_vars = function(self, info_queue, card)
-    local numerator, denominator = PB_UTIL.chance_vars(card)
+    local numerator, denominator = PB_UTIL.chance_vars(card, nil, card.ability.extra.numerator, card.ability.extra.denominator)
 
     return {
       vars = {
@@ -37,7 +48,7 @@ SMODS.Joker {
       if context.cardarea == G.play then
         if context.other_card:get_seal() then
           -- Gives chips if roll succeeds
-          if PB_UTIL.chance(card, 'stamp') then
+          if PB_UTIL.chance(card, 'stamp', self.ability.extra.numerator, self.ability.extra.denominator) then
             card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
 
             card_eval_status_text(card, 'extra', nil, nil, nil,

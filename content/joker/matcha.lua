@@ -15,7 +15,7 @@ SMODS.Joker {
   discovered = false,
   blueprint_compat = true,
   eternal_compat = false,
-  perishable_compat = true,
+  perishable_compat = false,
   pools = {
     Food = true
   },
@@ -44,13 +44,13 @@ SMODS.Joker {
       }
     end
 
-    if not context.blueprint and context.discard then
+    if not context.blueprint and context.pre_discard and not context.hook then
       if PB_UTIL.chance(card, 'matcha') then
         PB_UTIL.destroy_joker(card)
 
         return {
           message = localize('paperback_consumed_ex'),
-          colour = G.C.MULT,
+          colour = G.C.RED,
           card = card
         }
       end
