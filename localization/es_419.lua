@@ -605,7 +605,7 @@ return { -- Español
         }
       },
       j_paperback_blue_marble = {
-        name = "Marmol Azul",
+        name = "Mármol Azul",
         text = {
           "Gana {C:mult}+#1#{} Multi al usar una",
           "carta de {C:planet}Planeta{}",
@@ -825,7 +825,7 @@ return { -- Español
         }
       },
       j_paperback_marble_soda = {
-        name = "Soda de Marmol",
+        name = "Ramune", -- I got bullied bc I didnt know that the Soa was a real soda
         text = {
           "Las {C:attention}Cartas de Vidrio{} otorgan",
           "{X:mult,C:white}X#2#{} Multi adicional al anotar",
@@ -1356,8 +1356,7 @@ return { -- Español
         text = {
           "Gana {C:chips}+#1#{} Fichas por",
           "cada {C:attention}#3#{} en mano al",
-          "final de la {C:attention}ronda{} y {C:chips}+#2#",
-          "por cada {C:attention}#3#{} anotado",
+          "final de la {C:attention}ronda{}",
           "{C:inactive}(Actualmente {C:chips}+#4#{C:inactive} Fichas)"
         }
       },
@@ -1655,6 +1654,20 @@ return { -- Español
           "Gana {X:mult,C:white}X#2#{} Multi por mano",
           "jugada en esta {C:attention}Ciega{}",
           "{C:inactive}(Actualmente {X:mult,C:white}X#1#{C:inactive} Multi)"
+        },
+      },
+      j_paperback_photocopy = {
+        name = "Fotocopia",
+        text = {
+          "Copia la habilidad del comodín",
+          "del {C:attention}extremo derecho{}"
+        },
+      },
+      j_paperback_master_plan = {
+        name = "Plan Maestro",
+        text = {
+          "Copia la habilidad del",
+          "{C:attention}comodín{} de la izquierda"
         },
       },
       j_paperback_popsicle_stick = {
@@ -2288,7 +2301,7 @@ return { -- Español
       c_paperback_nine_of_swords = {
         name = "Nueve de Espadas",
         text = {
-          "Destruye el Comodín seleccionado",
+          "Destruye el Comodín seleccionado, gana {C:money}$5",
           "y no {C:red}puede{} aparecer de nuevo",
           "por el {C:attention}resto de la partida{}"
         }
@@ -2517,6 +2530,15 @@ return { -- Español
         }
       },
       c_paperback_thrill = {
+        name = "Estremecer",
+        text = {
+          "Otorga {X:mult,C:white}X#1#{} Multi por cada",
+          "{C:attention}descarte{} usado y se activa",
+          "en la {C:attention}primera{} mano jugada",
+          "{C:inactive}(Actualmente {X:mult,C:white}X#2#{C:inactive} Multi)",
+        }
+      },
+      c_paperback_thrill_inactive = {
         name = "Estremecer",
         text = {
           "Otorga {X:mult,C:white}X#1#{} Multi por cada",

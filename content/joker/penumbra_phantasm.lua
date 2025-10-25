@@ -18,6 +18,11 @@ SMODS.Joker {
   pools = {
     Music = true
   },
+  in_pool = function(self, args)
+    for _, v in ipairs(G.playing_cards or {}) do
+      if SMODS.has_no_rank(v) then return true end
+    end
+  end,
 
   loc_vars = function(self, info_queue, card)
     return {
@@ -55,5 +60,15 @@ SMODS.Joker {
         }
       end
     end
-  end
+  end,
+
+  joker_display_def = function(JokerDisplay)
+    return {
+      text = {
+        { text = "+" },
+        { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult" }
+      },
+      text_config = { colour = G.C.MULT },
+    }
+  end,
 }

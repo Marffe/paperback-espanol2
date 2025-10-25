@@ -13,19 +13,22 @@ SMODS.current_mod.optional_features = {
 
 -- Global mod calculate
 SMODS.current_mod.calculate = function(self, context)
-  -- green clip: gain mult for each played and scored clip
+  -- green clip: gain mult for every other played and scored clip
   if context.before then
     local clips_played = 0
     for _, v in ipairs(context.scoring_hand) do
       if not v.debuff and PB_UTIL.has_paperclip(v) then clips_played = clips_played + 1 end
     end
-    local scale_amount = math.floor(clips_played / 2)
-    if scale_amount > 0 then
+    if clips_played > 0 then
       for _, v in ipairs(G.playing_cards) do
         local clip = PB_UTIL.has_paperclip(v)
         if clip == "paperback_green_clip" and not v.debuff then
           local clip_table = v.ability.paperback_green_clip
-          clip_table.mult = clip_table.mult + (clip_table.mult_plus * scale_amount)
+          local clips_played_plus_odd = clip_table.odd + clips_played
+          -- Every 2 clips go into mult,
+          -- remaining odd clip goes to `odd`
+          clip_table.mult = clip_table.mult + clip_table.mult_plus * math.floor(clips_played_plus_odd / 2)
+          clip_table.odd = clips_played_plus_odd % 2
         end
       end
     end
@@ -311,6 +314,7 @@ PB_UTIL.ENABLED_JOKERS = {
   "nachos",
   "crispy_taco",
   "soft_taco",
+  -- "watermelon",
   "complete_breakfast",
   "ghost_cola",
   "b_soda",
@@ -346,9 +350,10 @@ PB_UTIL.ENABLED_JOKERS = {
   "one_sin_and_hundreds_of_good_deeds",
   "plague_doctor",
   "white_night",
-  -- "der_freischutz",
   "angel_investor",
+  -- "der_freischutz",
   "card_sleeve",
+  -- "plastic_wrap",
   "shopping_center",
   "everything_must_go",
   "tutor",
@@ -360,18 +365,21 @@ PB_UTIL.ENABLED_JOKERS = {
   "high_speed_rail",
   "small_scale_onshore_wind",
   "satellite_array",
+  -- "first_contact",
   "aurora_borealis",
   "grand_strategy",
   "moving_out",
   "ready_to_fly",
   "great_wave",
   "let_it_happen",
+  -- "paralyzed"
   "in_case_i_make_it",
   "rosary_beads",
   "joker_cd_i",
   "determination",
   "prince_of_darkness",
   "giga_size",
+  "photocopy",
   "mandela_effect",
   "jester_of_nihil",
   "shopkeep",
@@ -381,8 +389,15 @@ PB_UTIL.ENABLED_JOKERS = {
   "a_balatro_movie",
   "ncj",
   "bicycle",
+  -- "mezzetino",
+  -- "gauze",
   "joke_master",
+  -- "jokers_11",
   -- "book_of_life",
+  -- "hamsa",
+  -- "hamsa_r",
+  -- "nazar",
+  -- "prescript",
   "trans_flag",
   "pride_flag",
   "bismuth",
@@ -393,6 +408,7 @@ PB_UTIL.ENABLED_JOKERS = {
   "autumn_leaves",
   "river",
   "evergreens",
+  "master_plan",
   "the_wonder_of_you",
   "tian_tian",
   "backpack",
@@ -410,22 +426,31 @@ PB_UTIL.ENABLED_JOKERS = {
   -- "red_sun",
   "the_sun_rises",
   "blood_rain",
+  -- "war_without_reason",
   "paranoia",
   "der_fluschutze",
   "touch_tone_joker",
+  -- "the_batter",
+  -- "off_switch",
+  -- "alpha",
+  -- "omega",
+  -- "epsilon",
   "jestrica",
   "you_are_a_fool",
   "alert",
   "legacy",
+  -- "redscreen",
   "telamon",
   "weather_radio",
   "power_surge",
   "time_regression_mix",
   "find_jimbo",
   "joker_crossing",
+  -- "tower_of_balatro",
   "jimbos_inferno",
   "tome",
   "greeting_card",
+  -- "an_invitation",
   "jimbocards",
   "forlorn",
   "protocol",
@@ -444,6 +469,8 @@ PB_UTIL.ENABLED_JOKERS = {
   "better_call_jimbo",
   "jimbo_adventure",
   "ddakji",
+  -- "yacht_dice",
+  -- "deck_of_cards",
   "pocket_pair",
   "ultra_rare",
   -- "lore_digger",
@@ -478,9 +505,11 @@ PB_UTIL.ENABLED_JOKERS = {
   "gambit",
   "king_me",
   "manilla_folder",
+  -- "joker_duty",
   "clippy",
   "clothespin",
   "kintsugi_joker",
+  -- "happy_accident",
   "watercolor_joker",
   "medic",
   "festive_joker",
@@ -491,6 +520,7 @@ PB_UTIL.ENABLED_JOKERS = {
   "pedrillo",
   "nichola",
   "chaplin",
+  -- "shinzaemon",
 }
 
 PB_UTIL.ENABLED_MINOR_ARCANA = {
@@ -756,9 +786,11 @@ PB_UTIL.ENABLED_MINOR_ARCANA_BOOSTERS = {
   'minor_arcana_normal_1',
   'minor_arcana_normal_2',
   'minor_arcana_normal_3',
+  'minor_arcana_normal_4',
   'minor_arcana_jumbo_1',
   'minor_arcana_jumbo_2',
   'minor_arcana_mega',
+  'minor_arcana_mega_2',
 }
 
 PB_UTIL.ENABLED_EGO_GIFT_BOOSTERS = {
@@ -982,6 +1014,7 @@ if PB_UTIL.config.ego_gifts_enabled then
         set = 'paperback_ego_gift',
         area = G.pack_cards,
         skip_materialize = true,
+        soulable = true,
         key_append = 'paperback_extr'
       }
     end,

@@ -54,6 +54,17 @@ return { -- Español
           "No puedes ganar {C:money}interés"
         }
       },
+      b_paperback_shimmering = {
+        name = "Baraja Reluciente",
+        text = {
+          "{C:attention}+#1#{} ranura de consumibles",
+          "por cada {C:attention}Pecado{} único en tu",
+          "posesión",
+          "{C:red}#2#{} Ranuras de Comodín",
+          "Los {C:paperback_ego_gift}Paquetes de Extracción E.G.O.{}",
+          "Son {C:attention}5X{} más comunes"
+        }
+      },
     },
     Blind = {
       bl_paperback_quarter = {
@@ -296,9 +307,8 @@ return { -- Español
       j_paperback_langely = {
         name = "L'angely",
         text = {
-          "Ganas la mitad del {C:money}valor de venta{} de",
-          -- error: entrar -> derrotar
-          "tus comodines al derrotar una {C:attention}Ciega Grande{}.",
+          "Ganas la mitad del {C:money}valor de venta{} de tus",
+          "comodines al derrotar una {C:attention}Ciega Grande{}.",
           "Ganas todo el {C:money}valor de venta{}",
           "al derrotar una {C:attention}Ciega Jefe{}"
         }
@@ -595,7 +605,7 @@ return { -- Español
         }
       },
       j_paperback_blue_marble = {
-        name = "Marmol Azul",
+        name = "Mármol Azul",
         text = {
           "Gana {C:mult}+#1#{} Multi al usar una",
           "carta de {C:planet}Planeta{}",
@@ -623,8 +633,8 @@ return { -- Español
       j_paperback_collector = {
         name = "Comodín Coleccionista",
         text = {
-          "Ganas {C:money}$#1#{} al final de la",
-          "ronda por cada {C:attention}#2#{}",
+          "Ganas {C:money}$#1#{} al final de la ronda", 
+          "por cada {C:attention}#2#{}",
           "en tu baraja",
           "{C:inactive}(Actualmente {C:money}$#3#{C:inactive})"
         }
@@ -641,11 +651,11 @@ return { -- Español
       j_paperback_sommelier = {
         name = "Comodín Sumiller",
         text = {
-          "Si el {C:attention}primer descarte{}",
+          "Si el {C:attention}primer{} {C:red}descarte{}",
           "de la ronda contiene",
-          "una {C:attention}#1#{}, la",
-          "primera {C:attention}#1#{}",
-          "gana un sello al azar",
+          "una {C:attention}#1#{},",
+          "gana un {C:attention}#1#{}",
+          "sello al azar",
         }
       },
       j_paperback_medic = {
@@ -815,7 +825,7 @@ return { -- Español
         }
       },
       j_paperback_marble_soda = {
-        name = "Soda de Marmol",
+        name = "Ramune", -- I got bullied bc I didnt know that the Soa was a real soda
         text = {
           "Las {C:attention}Cartas de Vidrio{} otorgan",
           "{X:mult,C:white}X#2#{} Multi adicional al anotar",
@@ -873,7 +883,7 @@ return { -- Español
           "{X:mult,C:white}X#1#{} Multi por cada",
           "carta debajo de {C:attention}#2#{}",
           "en tu baraja",
-          "{C:inactive}(Actualmente {X:mult,C:white}X#3#{C:inactive} Multi)"
+          "{C:inactive,s:0.8}(Actualmente {X:mult,C:white,,s:0.8}X#3#{C:inactive,,s:0.8} Multi)"
         }
       },
       j_paperback_alert = {
@@ -1346,8 +1356,7 @@ return { -- Español
         text = {
           "Gana {C:chips}+#1#{} Fichas por",
           "cada {C:attention}#3#{} en mano al",
-          "final de la {C:attention}ronda{} y {C:chips}+#2#",
-          "por cada {C:attention}#3#{} anotado",
+          "final de la {C:attention}ronda{}",
           "{C:inactive}(Actualmente {C:chips}+#4#{C:inactive} Fichas)"
         }
       },
@@ -1606,19 +1615,19 @@ return { -- Español
       j_paperback_summoning_circle = {
         name = "Círculo de Invocación",
         text = {
-          "Si la mano jugada es una",
-          "{C:attention}#1#{}, crea una copia de",
-          "un {C:attention}consumible{} al azar",
+          "Si la mano jugada contiene",
+          "una {C:attention}#1#{}, crea una copia",
+          "de un {C:attention}consumible{} al azar",
           "{C:inactive}(Debe haber espacio){}"
         }
       },
       j_paperback_the_sun = {
         name = "El Sol",
         text = {
-          "Si la mano no contiene {C:paperback_dark_suit}Palos oscuros{}",
-          "gana {C:mult}+#1#{} Multi,",
-          "pierde {C:mult}+#1#{} Multi por",
-          "cada {C:paperback_dark_suit}Palo oscuro{} anotado",
+          "Si la mano no contiene",
+          "{C:paperback_dark_suit}Palos oscuros{} gana {C:mult}+#1#{} Multi,",
+          "pierde {C:mult}+#1#{} Multi por cada",
+          "{C:paperback_dark_suit}Palo oscuro{} anotado",
           "{C:inactive}(Actualmente {C:mult}+#2#{C:inactive} Multi)",
         },
       },
@@ -1645,6 +1654,20 @@ return { -- Español
           "Gana {X:mult,C:white}X#2#{} Multi por mano",
           "jugada en esta {C:attention}Ciega{}",
           "{C:inactive}(Actualmente {X:mult,C:white}X#1#{C:inactive} Multi)"
+        },
+      },
+      j_paperback_photocopy = {
+        name = "Fotocopia",
+        text = {
+          "Copia la habilidad del comodín",
+          "del {C:attention}extremo derecho{}"
+        },
+      },
+      j_paperback_master_plan = {
+        name = "Plan Maestro",
+        text = {
+          "Copia la habilidad del",
+          "{C:attention}comodín{} de la izquierda"
         },
       },
       j_paperback_popsicle_stick = {
@@ -2278,7 +2301,7 @@ return { -- Español
       c_paperback_nine_of_swords = {
         name = "Nueve de Espadas",
         text = {
-          "Destruye el Comodín seleccionado",
+          "Destruye el Comodín seleccionado, gana {C:money}$5",
           "y no {C:red}puede{} aparecer de nuevo",
           "por el {C:attention}resto de la partida{}"
         }
@@ -2341,7 +2364,7 @@ return { -- Español
         text = {
           "Selecciona {C:attention}#1#{} cartas, las",
           "2 cartas de la {C:attention}derecha{} copian la",
-          "{C:attention}mejora{} de la carta de la{C:attention}izquierda{}",
+          "{C:attention}mejora{} de la carta de la {C:attention}izquierda{}",
           "{C:inactive}(Arrastra para reordenar)"
         }
       },
@@ -2379,8 +2402,8 @@ return { -- Español
       c_paperback_eight_of_pentacles = {
         name = "Ocho de Pentáculos",
         text = {
-          "Ganas {C:money}$#1#{} por cada carta del",
-          "{C:tarot}Tarot{} o {C:paperback_minor_arcana}Arcana menor{}",
+          "Ganas {C:money}$#1#{} por cada carta",
+          "del {C:tarot}Tarot{} o {C:paperback_minor_arcana}Arcana menor{}",
           "única que hayas usado",
           "{C:inactive}(Actualmente {C:money}$#2#{C:inactive})"
         }
@@ -2515,6 +2538,15 @@ return { -- Español
           "{C:inactive}(Actualmente {X:mult,C:white}X#2#{C:inactive} Multi)",
         }
       },
+      c_paperback_thrill_inactive = {
+        name = "Estremecer",
+        text = {
+          "Otorga {X:mult,C:white}X#1#{} Multi por cada",
+          "{C:attention}descarte{} usado y se activa",
+          "en la {C:attention}primera{} mano jugada",
+          "{C:inactive}(Actualmente {X:mult,C:white}X#2#{C:inactive} Multi)",
+        }
+      },
       c_paperback_disk_fragment = {
         name = "Fragmento de Disco",
         text = {
@@ -2623,8 +2655,8 @@ return { -- Español
       v_paperback_second_trumpet = {
         name = "Segunda Trompeta",
         text = {
-          "Tu primer {C:paperback_ego_gift}Regalo E.G.O{}",
-          "otorga {C:attention}+#1#{} ranura de consumibles"
+          "Tu primer {C:paperback_ego_gift}Regalo E.G.O{} otorga",
+          "{C:attention}+#1#{} ranura de consumibles"
         }
       },
       v_paperback_rabbit_protocol = {
@@ -3372,12 +3404,12 @@ return { -- Español
         "de palo diferente"
       },
       ['paperback_Spectrum House'] = {
-        "Una Tercia y un Par y cada",
+        "Una Tercia y un Par con cada",
         "carta de palo diferente"
       },
       ['paperback_Spectrum Five'] = {
         "5 cartas de la misma categoría y",
-        "cada carta de palo diferente"
+        "cada una de palo diferente"
       },
     },
     labels = {

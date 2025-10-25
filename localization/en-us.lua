@@ -155,7 +155,7 @@ return {
       j_paperback_burning_pact = {
         name = "Burning Pact",
         text = {
-          "If a {C:attention}discard{} has only {C:attention}#1#{} card",
+          "If a {C:attention}discard{} has only {C:attention}#1#{} card,",
           "draw {C:attention}#2#{} additional cards"
         }
       },
@@ -632,7 +632,7 @@ return {
           "This Joker gains {X:mult,C:white}X#1#{} Mult",
           "for every {C:attention}#2#{}",
           "in {C:attention}scoring hand{}",
-          "{C:inactive}(Currently {X:mult,C:white}X#4#{}{C:inactive} Mult)"
+          "{C:inactive}(Currently {X:mult,C:white}X#3#{}{C:inactive} Mult)"
         }
       },
       j_paperback_sommelier = {
@@ -748,8 +748,8 @@ return {
         name = "NoCopyrightJokers",
         text = {
           "{C:chips}+#1#{} Chips for every",
-          "{C:money}$1{} of {C:attention}sell value",
-          "of all other owned Jokers",
+          "{C:money}$1{} of {C:attention}sell value{}",
+          "your other Jokers have",
           "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
         }
       },
@@ -1165,7 +1165,7 @@ return {
         text = {
           "This Joker gains {X:mult,C:white}X#1#{} Mult for",
           "each unique scored {C:attention}rank{}.",
-          "Resets after defeating a {C:attention}Boss Blind",
+          "Resets after {C:attention}Boss Blind",
           "{C:inactive}(Currently {X:mult,C:white}X#2#{} {C:inactive}Mult)",
           "{C:inactive}(Ranks played:{C:attention}#3#{C:inactive})",
         },
@@ -1327,10 +1327,9 @@ return {
         name = "Surfer",
         text = {
           "This Joker gains {C:chips}+#1#{} Chips",
-          "for every {C:attention}#3#{} held in hand",
-          "at {C:attention}end of round{}, and {C:chips}+#2#",
-          "Chips for every {C:attention}#3#{} scored",
-          "{C:inactive}(Currently {C:chips}+#4#{C:inactive} chips)"
+          "for every {C:attention}#2#{} held in hand",
+          "at {C:attention}end of round{}",
+          "{C:inactive}(Currently {C:chips}+#3#{C:inactive} chips)"
         }
       },
       j_paperback_blue_bonnets = {
@@ -1479,9 +1478,8 @@ return {
         name = "The Sun Rises",
         text = {
           "Set base Chips to {C:chips}#1#{}",
-          "Scored {C:paperback_light_suit}light suits{} give {C:chips}+#3#{} Chip",
-          "for each {C:paperback_light_suit}light suit{} you've scored",
-          "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
+          "Scored {C:paperback_light_suit}light suits{} give {C:chips}+#2#{} Chips",
+          "and increase Chips given by {C:chips}+#3#{}",
         },
       },
       j_paperback_jestrica = {
@@ -1630,6 +1628,20 @@ return {
           "This Joker gains {X:mult,C:white}X#2#{} Mult for",
           "every hand played in current {C:attention}Blind{}",
           "{C:inactive}(Will give {X:mult,C:white}X#1#{C:inactive} Mult)"
+        },
+      },
+      j_paperback_photocopy = {
+        name = "Photocopy",
+        text = {
+          "Copies the ability",
+          "of rightmost {C:attention}Joker{}"
+        },
+      },
+      j_paperback_master_plan = {
+        name = "Master Plan",
+        text = {
+          "Copies ability of",
+          "{C:attention}Joker{} to the left"
         },
       },
       j_paperback_popsicle_stick = {
@@ -2269,8 +2281,9 @@ return {
       c_paperback_nine_of_swords = {
         name = "Nine of Swords",
         text = {
-          "Destroy selected Joker",
-          "It {C:red}cannot{} appear again this run"
+          "Destroy selected Joker and earn {C:money}$#2#{}",
+          "It {C:red}cannot{} appear again this run",
+          "{C:inactive}(Can destroy {C:paperback_eternal}Eternals{C:inactive})"
         }
       },
       c_paperback_ten_of_swords = {
@@ -2406,9 +2419,9 @@ return {
       c_paperback_queen_of_pentacles = {
         name = "Queen of Pentacles",
         text = {
-          "Select up to {C:attention}#1#{} cards.",
-          "Copy the {C:attention}leftmost{} card's",
-          "{C:attention}rank{} onto the others",
+          "Select {C:attention}#1#{} cards.",
+          "Copy the {C:attention}left{} card's",
+          "{C:attention}rank{} onto the {C:attention}right{} card",
           "{C:inactive}(Drag to rearrange)"
         }
       },
@@ -2618,14 +2631,14 @@ return {
       v_paperback_second_trumpet = {
         name = "Second Trumpet",
         text = {
-          "Your first {C:paperback_ego_gift}EGO gift{}",
+          "Your first {C:paperback_ego_gift}E.G.O. Gift{}",
           "gives {C:attention}+#1#{} consumable slot"
         }
       },
       v_paperback_rabbit_protocol = {
         name = "Rabbit Protocol",
         text = {
-          "Your first {C:attention}sold{} {C:paperback_ego_gift}EGO gift{}",
+          "{C:attention}Selling{} an {C:paperback_ego_gift}E.G.O. Gift{}",
           "{C:attention}disables{} the current {C:attention}Boss Blind"
         },
         unlock = {
@@ -2901,43 +2914,39 @@ return {
       paperback_blue_clip = {
         name = "Blue Clip",
         text = {
-          "{X:chips,C:white}X#1#{} Chips when",
-          "{C:attention}scored{} for each",
-          "{C:attention}Clip{} in {C:attention}held hand",
+          "When {C:attention}scored{}, {X:chips,C:white}X#1#{} Chips",
+          "for each {C:attention}Clip{} held in hand",
           "{C:inactive}(Currently {X:chips,C:white}X#2#{C:inactive} Chips)"
         }
       },
       paperback_red_clip = {
         name = "Red Clip",
         text = {
-          "{C:mult}+#1#{} Mult when",
-          "{C:attention}scored{} for each",
-          "{C:attention}Clip{} in {C:attention}held hand",
+          "When {C:attention}scored{}, {C:mult}+#1#{} Mult",
+          "for each {C:attention}Clip{} held in hand",
           "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
         }
       },
       paperback_orange_clip = {
         name = "Orange Clip",
         text = {
-          "Earn {C:money}$#1#{} when",
-          "{C:attention}scored{} for every",
-          "{C:attention}2 Clips{} in {C:attention}held hand",
+          "When {C:attention}scored{}, earn {C:money}$#1#{}",
+          "for every {C:attention}2 Clips{} held in hand",
           "{C:inactive}(Currently {C:money}$#3#{C:inactive})"
         }
       },
       paperback_black_clip = {
         name = "Black Clip",
         text = {
-          "Retriggers when",
-          "{C:attention}scored{} if a {C:attention}Clip",
-          "is {C:attention}held in hand",
+          "Retriggers when {C:attention}scored{}",
+          "if a {C:attention}Clip{} is held in hand",
         }
       },
       paperback_yellow_clip = {
         name = "Yellow Clip",
         text = {
-          "If {C:attention}scored{} while a {C:attention}Clip",
-          "is {C:attention}held in hand{},",
+          "If {C:attention}scored{} while",
+          "a {C:attention}Clip{} is held in hand,",
           "{C:green}#1# in #2#{} chance for {C:red}+#3#{} Mult,",
           "{C:green}#4# in #5#{} chance for {X:mult,C:white}X#6#{} Mult",
           "and {C:green}#7# in #8#{} chance for {C:money}$#9#{}",
@@ -2946,8 +2955,8 @@ return {
       paperback_gold_clip = {
         name = "Gold Clip",
         text = {
-          "If {C:attention}held in hand{} at {C:attention}end of{}",
-          "{C:attention}round{}, earn {C:money}$#1#{} for each",
+          "If {C:attention}held in hand{} at {C:attention}end of round{},",
+          "earn {C:money}$#1#{} for each",
           "{C:attention}Clip{} scored this round",
           "{C:inactive}(Currently {C:money}$#2#{C:inactive}/$#3# max)"
         }
@@ -2955,37 +2964,35 @@ return {
       paperback_white_clip = {
         name = "White Clip",
         text = {
-          "If {C:attention}held in hand{} at {C:attention}end of",
-          "{C:attention}round{}, gains {C:chips}+#1#{} Chips for",
-          "each {C:attention}Clip{} scored this round",
+          "If {C:attention}held in hand{} at {C:attention}end of round{},",
+          "this Clip gains {C:chips}+#1#{} Chips",
+          "for each {C:attention}Clip{} scored this round",
           "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
         }
       },
       paperback_pink_clip = {
         name = "Pink Clip",
         text = {
-          "{X:mult,C:white}X#1#{} Mult when {C:attention}held in",
-          "{C:attention}hand{}, increases by {X:mult,C:white}X#2#",
-          "for each scored {C:attention}Clip",
+          "When {C:attention}held in hand{}, {X:mult,C:white}X#1#{} Mult",
+          "Increases by {X:mult,C:white}X#2#{}",
+          "for each scored {C:attention}Clip{}",
           "{C:inactive}(Resets after played hand)"
         }
       },
       paperback_green_clip = {
         name = "Green Clip",
         text = {
-          "Gains {C:mult}+#2#{} Mult for every",
-          "{C:attention}2{} scoring {C:attention}Clips{} played,",
-          "{C:mult}#3#{} Mult for each",
-          "discarded {C:attention}Clip{}",
+          "This Clip gains {C:mult}+#2#{} Mult",
+          "for every {C:attention}2{} scoring {C:attention}Clips{} played,",
+          "{C:mult}#3#{} Mult for each discarded {C:attention}Clip{}",
           "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
         }
       },
       paperback_purple_clip = {
         name = "Purple Clip",
         text = {
-          "Retrigger adjacent",
-          "cards if they",
-          "have a {C:attention}Clip{}"
+          "Retrigger {C:attention}adjacent{} cards",
+          "if they have a {C:attention}Clip{}"
         }
       },
       paperback_platinum_clip = {
@@ -2993,7 +3000,7 @@ return {
         text = {
           "When {C:attention}scored{}, force-trigger",
           "all non-{C:paperback_platinum}Platinum{} {C:attention}Clips{}",
-          "{C:attention}held in hand{}"
+          "held in hand"
         }
       },
       -- E.G.O. Gift Sins
@@ -3372,6 +3379,10 @@ return {
       paperback_da_capo_Diamonds = "Movement 3",
       paperback_da_capo_Hearts = "Movement 4",
       paperback_da_capo_None = "Finale!",
+
+      -- Suit category
+      paperback_light = "Light",
+      paperback_dark = "Dark",
     },
     v_dictionary = {
       paperback_a_discards = "+#1# Discards",
