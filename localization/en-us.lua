@@ -1867,7 +1867,7 @@ return {
         name = "Eyelander",
         text = {
           "Scored {C:attention}face{} cards are destroyed.",
-          "After scoring {C:attention}#1# face{} cards",
+          "After scoring {C:attention}#1# face{} cards,",
           "{C:attention}selling{} this Joker adds {C:dark_edition}Negative{}",
           "to a {C:attention}random{} Joker",
           "{C:inactive}(Currently {C:attention}#2#{C:inactive} Heads)"
@@ -2539,11 +2539,19 @@ return {
           "equal to their {C:attention}rank{} when scored",
         }
       },
-      c_paperback_pendant_of_nostalgia = {
+      c_paperback_pendant_of_nostalgia_minor_arcana = {
         name = "Pendant of Nostalgia",
         text = {
           "Whenever a {C:attention}playing card{} is destroyed,",
           "create a random {C:tarot}Tarot{} or {C:paperback_minor_arcana}Minor Arcana{} card",
+          "{C:inactive}(Must have room)"
+        }
+      },
+      c_paperback_pendant_of_nostalgia = {
+        name = "Pendant of Nostalgia",
+        text = {
+          "Whenever a {C:attention}playing card{} is destroyed,",
+          "create a random {C:tarot}Tarot{} card",
           "{C:inactive}(Must have room)"
         }
       },

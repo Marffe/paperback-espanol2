@@ -112,11 +112,20 @@ SMODS.current_mod.calculate = function(self, context)
       end
     end
   end
+
+  -- Keep Solar System global variable updated
+  if context.paperback and context.paperback.level_up then
+    PB_UTIL.update_solar_system(card)
+  end
+  -- Keep Reference Card global variable updated
+  if context.before then
+    PB_UTIL.calculate_highest_shared_played(card)
+  end
 end
 
 -- Sleeved cards can't be debuffed
 SMODS.current_mod.set_debuff = function(card)
-  if card.ability and card.ability.name == "m_paperback_sleeved" then
+  if SMODS.has_enhancement(card, "m_paperback_sleeved") then
     return "prevent_debuff"
   end
 end
@@ -142,6 +151,23 @@ SMODS.current_mod.reset_game_globals = function(run_start)
     end
   end
   if run_start then
+    -- Set last_scored_suit to a sensible value.
+    -- Mostly matters if Jester of Nihil is obtained before the first blind
+    -- on a deck with different suit distribution, like Checkered + Dreamer Deck/Sleeve
+    -- Might still fail if Joker is created before the run even begins?
+    G.E_MANAGER:add_event(Event({
+      func = function()
+        local cards = {}
+        for k, v in ipairs(G.playing_cards) do
+          if not SMODS.has_no_suit(v) then
+            cards[#cards + 1] = v
+          end
+        end
+        local selected = pseudorandom_element(cards, pseudoseed('paperback_last_scored_suit'))
+        if selected then G.GAME.paperback.last_scored_suit = selected.base.suit end
+        return true
+      end
+    }))
     G.GAME.paperback.banned_run_keys = {}
   end
 end

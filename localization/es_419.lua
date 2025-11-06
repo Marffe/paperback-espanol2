@@ -1730,9 +1730,9 @@ return { -- Español
       j_paperback_shopkeep = {
         name = "Tendero",
         text = {
-          "Gana una {C:attention}Etiqueta de cupón{} al derrotar",
-          "una ciega, al derrotar la {C:attention}Ciega{} {C:attention}Jefe{}",
-          "gana una {C:attention}Etiqueta de Vale{}"
+          "Gana una {C:attention}Etiqueta de cupón{} cada {C:attention}#1#{} {C:inactive}(#2#/#1#){}",
+          "ciegas derrotadas, al derrotar la {C:attention}Ciega{} {C:attention}Jefe{}",
+          "gana una {C:attention}Etiqueta de Vale{}",
         },
       },
       j_paperback_cakepop = {
