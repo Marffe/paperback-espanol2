@@ -22,15 +22,25 @@ function Game.init_game_object(self)
     bandaged_inc = 0,
     stained_inc = 0,
     destroyed_dark_suits = 0,
+    destroyed_cards = 0,
+    destroyed_cards_this_round = 0,
     last_tarot_energized = false,
     ranks_scored_this_ante = {},
     last_scored_suit = 'Spades',
+    hand_contained_crown = false,
     domino_ranks = {},
     jjjj_count = 0,
+    first_contact_count = 0,
     banned_run_keys = {},
     secret_hands = secrets,
     arcana_used = {},
     sold_ego_gifts = {},
+    finished_antes = {},
+    find_jimbo_unlock = false,
+    max_consumeables = 0,
+    let_it_happen_unlock_check = false,
+    jester_destroying_cards = false,
+    coin_collection_adding_money = false,
 
     weather_radio_hand = 'High Card',
     joke_master_hand = 'High Card',
@@ -45,6 +55,20 @@ function Game.init_game_object(self)
     second_trumpets = 0,
     second_trumpet_change = 0,
   }
+
+  return ret
+end
+
+-- set tarot_rate to 0 if in the minor arcana trials
+local start_run_ref = Game.start_run
+Game.start_run = function(self, args)
+  local ret = start_run_ref(self, args)
+  if self.GAME.modifiers.cup_trial
+  or self.GAME.modifiers.wand_trial
+  or self.GAME.modifiers.sword_trial
+  or self.GAME.modifiers.pentacle_trial then
+    self.GAME.tarot_rate = 0
+  end
   return ret
 end
 
@@ -161,7 +185,6 @@ function Card.remove(self)
       })
     end
   end
-
   return remove_ref(self)
 end
 
@@ -175,6 +198,21 @@ G.FUNCS.cash_out = function(e)
   })
 
   cash_out_ref(e)
+end
+
+-- Adds a new context for checking the maximum amount of consumables you had during a run
+local card_area_emplace_ref = CardArea.emplace
+function CardArea:emplace(card, location, stay_flipped)
+  local ret = card_area_emplace_ref(self, card, location, stay_flipped)
+  if self == G.consumeables then
+    local consumeable_tally = 0
+    for i = 1, #G.consumeables.cards do
+      consumeable_tally = consumeable_tally + 1
+    end
+    if consumeable_tally > G.GAME.paperback.max_consumeables then G.GAME.paperback.max_consumeables = consumeable_tally end
+    check_for_unlock({ type = 'modify_consumeable' })
+  end
+  return ret
 end
 
 -- Adds a new context for leveling up a hand
@@ -224,7 +262,7 @@ end
 local calculate_main_scoring_ref = SMODS.calculate_main_scoring
 function SMODS.calculate_main_scoring(context, scoring_hand)
   calculate_main_scoring_ref(context, scoring_hand)
-  if context.cardarea == G.play then
+  if context.cardarea == G.play or context.cardarea == 'unscored' then
     SMODS.calculate_context {
       paperback = {
         nichola = true -- Name can be changed later
@@ -251,25 +289,6 @@ function add_tag(tag)
   return add_tag_ref(tag)
 end
 
--- Ace still can't wrap around straights even though it's no longer straight_edge
--- accounts for Shortcut by checking for Q and 3 as well
-local get_straight_ref = get_straight
-function get_straight(hand, min_length, skip, wrap)
-  local orig_straights = get_straight_ref(hand, min_length, skip, wrap)
-  if wrap then return orig_straights end
-  local result = {}
-  for _, straight in ipairs(orig_straights) do
-    local has_king_queen = false
-    local has_2_3 = false
-    for i = 1, #straight do
-      if straight[i]:get_id() == 13 or straight[i]:get_id() == 12 then has_king_queen = true end
-      if straight[i]:get_id() == 2 or straight[i]:get_id() == 3 then has_2_3 = true end
-    end
-    if not (has_king_queen and has_2_3) then table.insert(result, straight) end
-  end
-  return result
-end
-
 -- Apostle-high straight flushes get renamed to "Rapture"
 local poker_hand_info_ref = G.FUNCS.get_poker_hand_info
 function G.FUNCS.get_poker_hand_info(_cards)
@@ -278,11 +297,10 @@ function G.FUNCS.get_poker_hand_info(_cards)
     local has_apostle = false
     local all_top = true
     for i = 1, #scoring_hand do
-      local rank = not SMODS.has_no_rank(scoring_hand[i]) and SMODS.Ranks[scoring_hand[i].base.value]
-      if rank.key == 'paperback_Apostle' then has_apostle = true end
-      if rank.key ~= 'Ace' and rank.key ~= 'paperback_Apostle' and not rank.face then all_top = false end
+      local rank = SMODS.Ranks[scoring_hand[i].base.value]
+      has_apostle = has_apostle or rank.key == 'paperback_Apostle'
+      all_top = all_top and (rank.key == 'paperback_Apostle' or rank.key == 'Ace' or rank.face)
     end
-
     if has_apostle and all_top then
       disp_text = "paperback_Straight Flush (Rapture)"
       loc_disp_text = localize(disp_text, "poker_hands")
@@ -377,7 +395,7 @@ function pseudorandom_element(_t, seed, args)
     if v == SMODS.ConsumableTypes['paperback_ego_gift']
     or (
       type(v) == 'table' and
-        (v.set == "paperback_ego_gift" or v.key == "c_paperback_golden_bough"))
+      (v.set == "paperback_ego_gift" or v.key == "c_paperback_golden_bough"))
     then
       table.insert(keys_to_remove, k)
     end
@@ -388,7 +406,6 @@ function pseudorandom_element(_t, seed, args)
   return pseudorandom_element_ref(_t, seed, args)
 end
 
-
 -- WhiteNight is indestructible
 -- Currently doesn't do much because WhiteNight always
 -- gets the Eternal sticker
@@ -396,4 +413,43 @@ local is_eternal_ref = SMODS.is_eternal
 function SMODS.is_eternal(card, ...)
   return is_eternal_ref(card, ...)
       or card.config.center.paperback and card.config.center.paperback.indestructible
+end
+
+-- Debuff non-face cards if All Smiles challenge rule is active
+local debuff_card_ref = Blind.debuff_card
+function Blind.debuff_card(self, card, from_blind)
+  local ret = debuff_card_ref(self, card, from_blind)
+  if card.area ~= G.jokers then
+    if G.GAME.modifiers.paperback_non_faces_banned_ante and (G.GAME.round_resets.ante >= G.GAME.modifiers.paperback_non_faces_banned_ante) then
+      if not card:is_face(true) then
+        card:set_debuff(true)
+        if card.debuff then card.debuffed_by_blind = true end
+      end
+    end
+  end
+
+  return ret
+end
+
+-- Keep track of which antes we have been in
+-- Used by Torii to know whether we should allow rewinding current ante
+local ease_ante_ref = ease_ante
+function ease_ante(mod)
+  G.GAME.paperback.finished_antes[G.GAME.round_resets.ante] = true
+  return ease_ante_ref(mod)
+end
+
+-- Evaluate context when XChips is scored (for Nigori scaling)
+-- Could be expanded on to contain other scoring effects but this is all that's necessary currently
+local calculate_individual_effect_ref = SMODS.calculate_individual_effect
+function SMODS.calculate_individual_effect(effect, scored_card, key, amount, from_edition)
+  local xchips_keys = { 'x_chips', 'xchips', 'Xchip_mod', }
+  if PB_UTIL.find(xchips_keys, key) and amount ~= 0 then
+    SMODS.calculate_context({
+      paperback = {
+        xchips_scored = true,
+      }
+    })
+  end
+  return calculate_individual_effect_ref(effect, scored_card, key, amount, from_edition)
 end

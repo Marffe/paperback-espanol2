@@ -3,6 +3,7 @@ SMODS.Joker { -- Guns Blazin'
   config = {
     extra = {
       xmult = 1.5,
+      rank = "Ace"
     }
   },
   pos = {
@@ -13,16 +14,38 @@ SMODS.Joker { -- Guns Blazin'
   rarity = 2,
   blueprint_compat = true,
   eternal_compat = true,
-  unlocked = true,
+  unlocked = false,
   discovered = false,
   atlas = 'jokers_atlas',
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult } }
+    return { vars = { card.ability.extra.xmult, card.ability.extra.rank } }
+  end,
+  locked_loc_vars = function(self, info_queue, card)
+    return { vars = { 5 } }
+  end,
+
+  paperback_credit = {
+    coder = { 'thermo' },
+  },
+
+  check_for_unlock = function(self, args)
+    if args.type == 'hand_contents' then
+      local tally = 0
+      for j = 1, #args.cards do
+        if SMODS.has_enhancement(args.cards[j], 'm_steel') then
+          tally = tally + 1
+          if tally >= 5 then
+            return true
+          end
+        end
+      end
+    end
+    return false
   end,
 
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play then
-      if context.other_card:get_id() == 14 then
+      if PB_UTIL.is_rank(context.other_card, card.ability.extra.rank) then
         return {
           x_mult = card.ability.extra.xmult
         }

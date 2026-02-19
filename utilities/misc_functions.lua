@@ -1,3 +1,13 @@
+-- Literally just an implementation of table.find since this version of lua doesn't have one by default
+function PB_UTIL.find(table, value)
+  for i, v in ipairs(table) do
+    if v == value then
+      return i
+    end
+  end
+  return nil
+end
+
 -- Initialize Food pool if not existing, which may be created by other mods.
 -- Any joker can add itself to this pool by adding a pools table to its definition
 -- Credits to Cryptid for the idea
@@ -60,14 +70,18 @@ end
 --- @return integer
 function PB_UTIL.count_paperclips(args)
   local clips = 0
-
-  for _, v in ipairs(args.area and args.area.cards or {}) do
+  if not args.area then return 0 end
+  for _, v in ipairs(args.area.cards or args.area) do
     local debuff_check = args.allow_debuff or not v.debuff
     local highlighted_check = not args.exclude_highlighted or not v.highlighted
 
     if PB_UTIL.has_paperclip(v) and debuff_check and highlighted_check then
       clips = clips + 1
     end
+  end
+
+  for i, v in ipairs(SMODS.find_card('j_paperback_clothespin', args.allow_debuff)) do
+    clips = clips + 1
   end
 
   return clips
@@ -231,7 +245,7 @@ end
 function PB_UTIL.set_sell_value(card, amount)
   if not card.set_cost then return end
   card.ability.paperback_forced_base_sell_cost = amount
-  card.ability.extra_value = nil
+  card.ability.extra_value = 0
   card:set_cost()
 end
 
@@ -335,9 +349,11 @@ end
 --- Creates and redeems the specified voucher
 ---@param key string
 function PB_UTIL.redeem_voucher(key)
+  local x = G.shop_vouchers and (G.shop_vouchers.T.x + G.shop_vouchers.T.w / 2) or G.hand.T.x
+  local y = G.shop_vouchers and G.shop_vouchers.T.y or (G.hand.T.y + G.ROOM.T.y + 9)
+
   local voucher = Card(
-    G.shop_vouchers.T.x + G.shop_vouchers.T.w / 2,
-    G.shop_vouchers.T.y,
+    x, y,
     G.CARD_W, G.CARD_H, G.P_CARDS.empty,
     G.P_CENTERS[key],
     { bypass_discovery_center = true, bypass_discovery_ui = true }
@@ -1201,6 +1217,26 @@ function PB_UTIL.is_card(c)
   return c and type(c) == "table" and c.is and type(c.is) == "function" and c:is(Card)
 end
 
+--- Whether this center is considered banned, either through:
+--- - banned_keys from the base game
+--- - banned_run_keys from paperback
+--- - due to missing paperback setting requirements
+---@param center table any table under G.P_CENTERS or SMODS.Centers
+---@return boolean
+function PB_UTIL.is_banned(center)
+  if G.GAME.banned_keys[center.key] or G.GAME.paperback.banned_run_keys[center.key] then
+    return true
+  end
+
+  for _, v in pairs(center.paperback and center.paperback.requirements or {}) do
+    if not PB_UTIL.config[v.setting] then
+      return true
+    end
+  end
+
+  return false
+end
+
 -- Returns a table of all the unique special effects in the deck
 ---@param check_for_enhancements boolean
 ---@param check_for_seals boolean
@@ -1272,4 +1308,98 @@ function PB_UTIL.check_jimbocards_at_0()
     end
   end
   return false
+end
+
+-- Creates an array of card prototypes that are valid for creating challenge decks
+---@param t { suits: string[], ranks: string[] }
+---@return { s:string, r:string }[]
+function PB_UTIL.create_deck(t)
+  local cards = {}
+  local suits = t.suits or {}
+  local ranks = t.ranks or {}
+
+  for _, suit in ipairs(suits) do
+    for _, rank in ipairs(ranks) do
+      if SMODS.Suits[suit] and SMODS.Ranks[rank] then
+        cards[#cards + 1] = {
+          s = SMODS.Suits[suit].card_key,
+          r = SMODS.Ranks[rank].card_key
+        }
+      end
+    end
+  end
+
+  return cards
+end
+
+-- Returns a function meant to be used for banned_cards inside
+-- a challenge that handles keys that might not exist
+---@param list string[]
+---@return fun(): {id:string}[]
+function PB_UTIL.banned_challenge_centers(list)
+  return function()
+    local banned = {}
+
+    for _, v in ipairs(list) do
+      if G.P_CENTERS[v] then
+        banned[#banned + 1] = { id = v }
+      end
+    end
+
+    return banned
+  end
+end
+
+--- Logic for the Suit Drink Jokers
+--- @param check (boolean) whether to only check for the suit presence
+--- @param card (Card)
+--- @param context (CalcContext)
+function PB_UTIL.suit_drink_logic(card, context, check)
+  local has_suit = false
+  -- Check if played hand contains the required suit
+  for _, v in ipairs(context.scoring_hand) do
+    if v:is_suit(card.ability.extra.suit) then
+      has_suit = true
+      card.ability.extra.risk = false
+      break
+    end
+  end
+
+  if check then
+    return not has_suit
+  end
+
+  if not has_suit then
+    -- If the function is only checking for the suit presence, return here
+
+    -- Check if card is already at risk of being consumed, otherwise put it at risk
+    if not card.ability.extra.risk then
+      card.ability.extra.risk = true
+      juice_card_until(
+        card,
+        function() return card.ability.extra.risk and not G.RESET_JIGGLES end,
+        true
+      )
+      return {
+        message = localize('paperback_tipsy_ex'),
+        colour = G.C.SUITS[card.ability.extra.suit],
+        card = card
+      }
+    else
+      PB_UTIL.destroy_joker(card)
+      return {
+        message = localize('paperback_consumed_ex'),
+        colour = G.C.SUITS[card.ability.extra.suit],
+        card = card
+      }
+    end
+  end
+end
+
+--- Count the number of entries in a table not in a sequence
+--- @param table (table)
+function PB_UTIL.count_entries(table)
+  local count = 0
+  for _ in pairs(table) do count = count + 1 end
+  return count
 end

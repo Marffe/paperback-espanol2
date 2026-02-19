@@ -19,10 +19,15 @@ SMODS.Joker {
     requires_minor_arcana = true
   },
 
+  paperback_credit = {
+    coder = { 'dowfrin' }
+  },
+
   loc_vars = function(self, info_queue, card)
     return {
       vars = {
         localize(card.ability.extra.hand, 'poker_hands'),
+        localize('k_paperback_minor_arcana')
       }
     }
   end,

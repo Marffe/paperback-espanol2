@@ -17,7 +17,12 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   paperback = {
-    requires_custom_suits = true
+    requires_custom_suits = true,
+    requires_spectrum_or_suit = true
+  },
+
+  paperback_credit = {
+    coder = { 'dowfrin' }
   },
 
   in_pool = function(self, args)

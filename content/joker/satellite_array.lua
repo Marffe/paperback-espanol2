@@ -7,8 +7,13 @@ SMODS.Joker {
   atlas = "jokers_atlas",
   perishable_compat = false,
   config = { extra = { chips_mod = 15, chips_rem = 5, chips = 0 } },
+
+  paperback_credit = {
+    coder = { 'thermo' }
+  },
+
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.chips_mod, card.ability.extra.chips_rem, card.ability.extra.chips } }
+    return { vars = { card.ability.extra.chips_mod, card.ability.extra.chips_rem, card.ability.extra.chips, localize('k_planet') } }
   end,
   calculate = function(self, card, context)
     if context.joker_main and card.ability.extra.chips > 0 then

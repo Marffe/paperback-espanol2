@@ -19,6 +19,9 @@ SMODS.Joker {
   blueprint_compat = false,
   eternal_compat = true,
   soul_pos = nil,
+  paperback_credit = {
+    coder = { 'oppositewolf' }
+  },
 
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_polychrome
@@ -27,7 +30,9 @@ SMODS.Joker {
     return {
       vars = {
         numerator,
-        denominator
+        denominator,
+        localize(card.ability.extra.suit1, 'suits_plural'),
+        localize(card.ability.extra.suit2, 'suits_plural')
       }
     }
   end,

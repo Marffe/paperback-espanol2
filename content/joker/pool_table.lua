@@ -11,6 +11,16 @@ SMODS.Joker {
   eternal_compat = true,
   soul_pos = nil,
 
+  paperback_credit = {
+    coder = { 'oppositewolf' }
+  },
+
+  loc_vars = function (self, info_queue, card)
+    return {
+      vars = { localize('k_planet') }
+    }
+  end,
+
   -- Calculate function for the Joker
   calculate = function(self, card, context)
     if context.before then

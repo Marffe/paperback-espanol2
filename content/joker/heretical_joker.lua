@@ -19,10 +19,15 @@ SMODS.Joker {
     requires_stars = true
   },
 
+  paperback_credit = {
+    coder = { 'srockw' },
+  },
+
   loc_vars = function(self, info_queue, card)
     return {
       vars = {
         card.ability.extra.s_mult,
+        localize(card.ability.extra.suit, 'suits_singular')
       }
     }
   end,

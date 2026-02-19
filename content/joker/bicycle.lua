@@ -14,11 +14,23 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   soul_pos = nil,
+  paperback_credit = {
+    coder = { 'oppositewolf' }
+  },
 
   enhancement_gate = "m_wild",
 
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
+    return {
+      vars = {
+        localize {
+          type = 'name_text',
+          set = 'Enhanced',
+          key = 'm_wild'
+        },
+      }
+    }
   end,
 
   calculate = function(self, card, context)
@@ -37,7 +49,7 @@ SMODS.Joker {
   joker_display_def = function(JokerDisplay)
     return {
       text = {
-        { text = "+",                              colour = G.C.MULT },
+        { text = "+", colour = G.C.MULT },
         { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT },
       },
 

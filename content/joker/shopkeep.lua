@@ -4,6 +4,7 @@ SMODS.Joker {
     extra = {
       count = 0,
       coupon_blinds_needed = 2,
+      tags = {'tag_coupon', 'tag_voucher'}
     }
   },
   rarity = 3,
@@ -14,13 +15,21 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
 
+  paperback_credit = {
+    coder = { 'aa7' }
+  },
+
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_TAGS.tag_coupon
     info_queue[#info_queue + 1] = G.P_TAGS.tag_voucher
-    return { vars = {
-      card.ability.extra.coupon_blinds_needed,
-      card.ability.extra.count % card.ability.extra.coupon_blinds_needed
-    } }
+    return {
+      vars = {
+        card.ability.extra.coupon_blinds_needed,
+        card.ability.extra.count % card.ability.extra.coupon_blinds_needed,
+        localize { type = 'name_text', key = card.ability.extra.tags[1], set = 'Tag' },
+        localize { type = 'name_text', key = card.ability.extra.tags[2], set = 'Tag' }
+      }
+    }
   end,
 
   check_for_unlock = function(self, args)
@@ -37,13 +46,13 @@ SMODS.Joker {
         card.ability.extra.incremented = true -- reset in reset_game_globals
       end
       if card.ability.extra.count % card.ability.extra.coupon_blinds_needed == 0 then
-        PB_UTIL.add_tag('tag_coupon')
+        PB_UTIL.add_tag(card.ability.extra.tags[1])
         card:juice_up()
       end
     end
 
     if context.end_of_round and G.GAME.blind.boss and context.main_eval then
-      PB_UTIL.add_tag('tag_voucher')
+      PB_UTIL.add_tag(card.ability.extra.tags[2])
       card:juice_up()
     end
   end
